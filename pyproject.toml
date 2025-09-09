@@ -11,7 +11,16 @@ dependencies = [
     "fastapi[all] (>=0.116.1,<0.117.0)",
     "sqlalchemy (>=2.0.43,<3.0.0)",
     "asyncpg (>=0.30.0,<0.31.0)",
-    "phonenumbers (>=9.0.13,<10.0.0)"
+    "phonenumbers (>=9.0.13,<10.0.0)",
+    "pytest (>=8.4.2,<9.0.0)",
+    "asgi-lifespan (>=2.1.0,<3.0.0)",
+    "pytest-asyncio (>=1.1.0,<2.0.0)"
+]
+
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
 ]
 
 

@@ -81,7 +81,7 @@ async def get_users(
     )
 
 
-@router.get(path="/get_user_by_api_key", description="Get Users by api key")
+@router.get(path="/get_user_by_api_key/", description="Get Users by api key")
 async def get_users_by_api_key(
     source_id: int,
     api_key: str = Depends(validate_api_key),

@@ -8,7 +8,6 @@ from fastapi import HTTPException, status
 
 from api_v1.users.schemas import User, UserUpdate
 from api_v1.database_manager.models.users import Users
-# from api_v1.database_manager.models.api_keys import ApiKeys
 
 
 async def create_user(user: User, session: AsyncSession):
