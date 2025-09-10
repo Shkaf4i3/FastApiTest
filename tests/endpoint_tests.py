@@ -19,13 +19,13 @@ from main import app as router
 api_key = "testkey" # api_key should be getted from db
 
 
-@fixture(autouse=True)
+@fixture(autouse=True, loop_scope="module")
 async def create_tables():
     async with test_db_helper.engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
-@fixture
+@fixture(loop_scope="module")
 async def session() -> AsyncGenerator[AsyncSession, Any]:
     async with test_db_helper.session_factory() as session:
         try:
@@ -34,19 +34,20 @@ async def session() -> AsyncGenerator[AsyncSession, Any]:
             await session.close()
 
 
-@fixture
+@fixture(loop_scope="module")
 async def client(session: AsyncSession):
     async def override_open_session():
         yield session
+        await session.close()
 
     router.dependency_overrides[open_session] = override_open_session
     async with AsyncClient(transport=ASGITransport(app=router), base_url="http://app.io") as client:
         yield client
+
         router.dependency_overrides.clear()
 
 
-# each need run separate from others (while don't know how to fix bag with event loop)
-@mark.asyncio
+@mark.asyncio(loop_scope="module")
 async def test_success_create_user(client: AsyncClient, session: AsyncSession):
     params = {
         "api_key": api_key,
@@ -66,6 +67,7 @@ async def test_success_create_user(client: AsyncClient, session: AsyncSession):
         url="/app/create_user/",
         json=data.model_dump(), params=params,
     )
+
     try:
         if result.scalar():
             assert response.json() == {"success": False, "reason": "User alredy exists"}
@@ -78,7 +80,7 @@ async def test_success_create_user(client: AsyncClient, session: AsyncSession):
             }
 
 
-@mark.asyncio
+@mark.asyncio(loop_scope="module")
 async def test_success_create_list_users(client: AsyncClient, session: AsyncSession):
     params = {
         "api_key": api_key,
@@ -124,7 +126,7 @@ async def test_success_create_list_users(client: AsyncClient, session: AsyncSess
         assert response.json() == data
 
 
-@mark.asyncio
+@mark.asyncio(loop_scope="module")
 async def test_get_users(
     client: AsyncClient,
     session: AsyncSession,
@@ -144,7 +146,7 @@ async def test_get_users(
         assert response.status_code == 500
 
 
-@mark.asyncio
+@mark.asyncio(loop_scope="module")
 async def test_get_users_by_api_key(
     client: AsyncClient,
     session: AsyncSession,
@@ -181,7 +183,7 @@ async def test_get_users_by_api_key(
     assert response.json() == expected_users
 
 
-@mark.asyncio
+@mark.asyncio(loop_scope="module")
 async def test_update_status_user(
     client: AsyncClient,
     session: AsyncSession,
