@@ -1,0 +1,20 @@
+[project]
+name = "newproject"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Shkaf4i3",email = "fleximes@protonmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[all] (>=0.120.1,<0.121.0)",
+    "sqlalchemy (>=2.0.44,<3.0.0)",
+    "asyncpg (>=0.30.0,<0.31.0)",
+    "email-validator (>=2.3.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

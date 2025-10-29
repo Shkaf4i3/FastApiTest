@@ -1,0 +1,13 @@
+from fastapi import FastAPI
+from uvicorn import run
+
+from utils import lifespan
+from routes import users_router
+
+
+app = FastAPI(lifespan=lifespan, docs_url="/", redoc_url=None,)
+app.include_router(router=users_router)
+
+
+if __name__ == "__main__":
+    run("main:app", reload=True)
