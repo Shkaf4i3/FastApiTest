@@ -33,4 +33,4 @@ jobs:
         python-version: '3.13'
 
     - name: Run tests
-      run: python tests\crud_tests.py
+      run: python tests/crud_tests.py
