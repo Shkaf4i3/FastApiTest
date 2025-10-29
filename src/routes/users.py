@@ -18,7 +18,7 @@ router = APIRouter(prefix="/users", tags=["Users Router"])
 async def create_user(
     dto: UserDto,
     user_service: Annotated[UserService, Depends(services.get_user_service)],
-) -> UserDto | None:
+) -> UserDto | dict[str, str]:
     try:
         new_user = await user_service.create_user(dto=dto)
         return new_user
@@ -34,7 +34,7 @@ async def create_user(
 async def get_user_by_email(
     email: str,
     user_service: Annotated[UserService, Depends(services.get_user_service)],
-) -> UserDto | None:
+) -> UserDto | dict[str, str]:
     try:
         exists_user = await user_service.get_user_by_email(email=email)
         return exists_user

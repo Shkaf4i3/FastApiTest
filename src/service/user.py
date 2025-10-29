@@ -11,7 +11,7 @@ class UserService:
 
 
     @transactional
-    async def create_user(self, dto: UserDto) -> UserDto | None:
+    async def create_user(self, dto: UserDto) -> UserDto | str:
         exist_user = await self.user_repo.get_user_by_email(email=dto.email)
         if exist_user:
             raise KeyError(f"User with email - {dto.email} already exists")
