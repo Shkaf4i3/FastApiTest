@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Integer
 from pydantic import EmailStr
 
-from model import Base
+from ..model import Base
 
 
 class User(Base):

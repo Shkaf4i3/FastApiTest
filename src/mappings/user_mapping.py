@@ -1,5 +1,5 @@
-from model import User
-from dto import UserDto
+from ..model import User
+from ..dto import UserDto
 
 
 def mapping_user(user: User) -> UserDto:

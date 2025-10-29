@@ -1,4 +1,4 @@
-from core import db_manage
+from ..core import db_manage
 
 
 async def open_session():

@@ -2,8 +2,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from model import User, Base
-from core import db_manage
+from ..model import User, Base
+from ..core import db_manage
 
 
 @asynccontextmanager

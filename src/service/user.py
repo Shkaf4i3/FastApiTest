@@ -1,7 +1,7 @@
-from repo import UserRepo, UnitOfWork, transactional
-from model import User
-from mappings import user_mapping
-from dto import UserDto
+from ..repo import UserRepo, UnitOfWork, transactional
+from ..model import User
+from ..mappings import user_mapping
+from ..dto import UserDto
 
 
 class UserService:

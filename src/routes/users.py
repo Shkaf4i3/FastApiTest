@@ -2,9 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, status, Depends
 
-from dto import UserDto
-from deps import services
-from service import UserService
+from ..dto import UserDto
+from ..deps import services
+from ..service import UserService
 
 
 router = APIRouter(prefix="/users", tags=["Users Router"])

@@ -9,13 +9,28 @@ on:
 jobs:
   hello-world:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
+
     - name: Say Hello
       run: echo "Hello, GitHub Actions! This is my first workflow!"
-      
+
     - name: Show date
       run: date
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Run tests
+      run: python tests\crud_tests.py
