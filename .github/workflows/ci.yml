@@ -35,8 +35,8 @@ jobs:
           - 5432:5432
 
     env:
-      DSN: postgresql+asyncpg://postgres:5565@127.0.0.1/tests
-      TEST_DSN: postgresql+asyncpg://postgres:5565@127.0.0.1/users
+      DSN: ${{ secrets.DSN }}
+      TEST_DSN: ${{ secrets.TEST_DSN }}
 
     steps:
     - name: Checkout code
