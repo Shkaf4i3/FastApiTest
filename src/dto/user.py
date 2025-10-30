@@ -5,3 +5,4 @@ class UserDto(BaseModel):
     username: str
     age: int
     email: EmailStr
+    status: str | None = None

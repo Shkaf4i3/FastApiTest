@@ -7,4 +7,5 @@ def mapping_user(user: User) -> UserDto:
         username=user.username,
         age=user.age,
         email=user.email,
+        status=user.status
     )

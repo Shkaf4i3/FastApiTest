@@ -2,7 +2,7 @@ from pytest_asyncio import fixture
 from pytest import mark
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.model import User, Base
+from src.model import User, Base, UserStatus
 from src.core import db_manage
 from src.service import UserService
 from src.repo import UnitOfWork, UserRepo
@@ -84,3 +84,22 @@ async def test_get_user_by_email(
 
     created_user = await get_user_repo.get_user_by_email(email=get_user.email)
     assert get_user.email == created_user.email
+
+
+@mark.asyncio(loop_scope="module")
+async def test_update_status_user(
+    get_test_user_service: UserService,
+    get_user_repo: UserRepo,
+    get_user: UserDto,
+):
+    status = UserStatus.SUPPORT
+    await get_test_user_service.create_user(dto=get_user)
+
+    await get_test_user_service.update_user(status=status, email=get_user.email)
+    refresh_user = await get_user_repo.get_user_by_email(email=get_user.email)
+    assert refresh_user.status == status
+
+    status = UserStatus.USER
+    await get_test_user_service.update_user(status=status, email=get_user.email)
+    refresh_user = await get_user_repo.get_user_by_email(email=get_user.email)
+    assert refresh_user.status == status
