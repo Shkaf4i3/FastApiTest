@@ -43,6 +43,7 @@ jobs:
       run: |
         poetry env activate
         poetry install
+        poetry show --tree
 
     - name: Run tests
       run: python ./tests/crud_tests.py
