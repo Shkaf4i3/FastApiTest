@@ -40,7 +40,9 @@ jobs:
         virtualenvs-in-project: true
 
     - name: Setup python libraries
-      run: poetry install
+      run: |
+        poetry install
+        poetry shell
 
     - name: Run tests
       run: python tests/crud_tests.py
