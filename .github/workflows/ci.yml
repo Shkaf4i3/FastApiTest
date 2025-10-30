@@ -42,7 +42,7 @@ jobs:
     - name: Setup python libraries
       run: |
         poetry install
-        poetry shell
+        eval $(poetry env activate)
 
     - name: Run tests
       run: python tests/crud_tests.py
