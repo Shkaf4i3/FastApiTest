@@ -24,8 +24,8 @@ jobs:
         image: postgres:17
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
+          POSTGRES_PASSWORD: 5565
+          POSTGRES_DB: users
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
