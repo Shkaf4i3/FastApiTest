@@ -45,4 +45,4 @@ jobs:
         poetry install
 
     - name: Run tests
-      run: python tests/crud_tests.py
+      run: python ./tests/crud_tests.py
