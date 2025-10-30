@@ -30,7 +30,7 @@ jobs:
     - name: Install postgresql
       uses: tj-actions/install-postgresql@v3
       with:
-        postgresql-version: "18"
+        postgresql-version: "17"
 
     - name: Setup Python
       uses: actions/setup-python@v4
