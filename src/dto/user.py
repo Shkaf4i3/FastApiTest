@@ -1,8 +1,10 @@
 from pydantic import BaseModel, EmailStr
 
+from ..model import UserStatus
+
 
 class UserDto(BaseModel):
     username: str
     age: int
     email: EmailStr
-    status: str | None = None
+    status: UserStatus | None = None

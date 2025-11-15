@@ -10,4 +10,4 @@ app.include_router(router=users_router)
 
 
 if __name__ == "__main__":
-    run("main:app", reload=True)
+    run(app="main:app", reload=True)

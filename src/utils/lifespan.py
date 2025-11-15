@@ -7,7 +7,7 @@ from ..core import db_manage
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> None:
+async def lifespan(_: FastAPI):
     async with db_manage.session_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
