@@ -35,7 +35,6 @@ async def get_test_user_service(test_session: AsyncSession) -> UserService:
         user_repo=UserRepo(session=test_session),
     )
 
-
 @fixture
 def get_user() -> UserDto:
     return UserDto(username="Test", age=56, email="fleximes@yandex.ru")
