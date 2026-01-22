@@ -24,7 +24,7 @@ class UserRepo:
         result = await self.session.execute(statement=stmt)
         return result.scalar()
 
-    async def get_list_users(self) -> list[User] | None:
+    async def get_list_users(self) -> list[User]:
         stmt = select(User)
         result = await self.session.execute(statement=stmt)
         return result.scalars().all()

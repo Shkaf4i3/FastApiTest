@@ -14,7 +14,7 @@ class UserStatus(enum):
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "Users"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: str(uuid4()))
     username: Mapped[str] = mapped_column(String, nullable=False)

@@ -30,7 +30,7 @@ class UserService:
 
 
     @transactional
-    async def delete_user_by_email(self, email: str) -> str:
+    async def delete_user_by_email(self, email: str) -> str | dict[str, str]:
         exist_user = await self.user_repo.get_user_by_email(email=email)
         if not exist_user:
             raise KeyError(f"User with email - {email} not found")
@@ -40,11 +40,13 @@ class UserService:
             "message": f"User with email {email} successfully deleted",
         }
 
-    async def get_list_users(self) -> list[UserDto] | None:
+
+    async def get_list_users(self) -> list[UserDto]:
         users = await self.user_repo.get_list_users()
         if not users:
             return []
         return [user_mapping.mapping_user(user) for user in users]
+
 
     @transactional
     async def update_user(self, status: str, email: str) -> UserDto | str:
@@ -54,6 +56,6 @@ class UserService:
             raise KeyError(f"User with email {email} not found")
 
         user.status = status
-        await self.user_repo.create_user(user=user)
 
+        await self.user_repo.create_user(user=user)
         return user_mapping.mapping_user(user=user)
