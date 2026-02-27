@@ -25,8 +25,12 @@ jobs:
           - 5432:5432
 
     env:
-      DSN: ${{ secrets.DSN }}
-      TEST_DSN: ${{ secrets.TEST_DSN }}
+      dsn: ${{ secrets.DSN }}
+      test_dsn: ${{ secrets.TEST_DSN }}
+      admin_login: ${{ secrets.ADMIN_LOGIN }}
+      admin_password: ${{ secrets.ADMIN_PASSWORD }}
+      jwt_key: ${{ secrets.JWT_KEY }}
+      jwt_algorithm: ${{ secrets.JWT_ALGORITHM }}
 
     steps:
     - name: Checkout code
