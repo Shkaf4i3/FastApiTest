@@ -1,7 +1,7 @@
 from ..repo import UserRepo, UnitOfWork, transactional
 from ..model import User
 from ..mappings import user_mapping
-from ..dto import UserDto
+from ..dto import UserDto, UserCreateDto
 
 
 class UserService:
@@ -11,21 +11,19 @@ class UserService:
 
 
     @transactional
-    async def create_user(self, dto: UserDto) -> UserDto | str:
+    async def create_user(self, dto: UserCreateDto) -> UserDto:
         exist_user = await self.user_repo.get_user_by_email(email=dto.email)
         if exist_user:
             raise KeyError(f"User with email - {dto.email} already exists")
-
         new_user = User(username=dto.username, age=dto.age, email=dto.email)
-        created_user = await self.user_repo.create_user(user=new_user)
+        created_user = await self.user_repo.save_user(user=new_user)
         return user_mapping.mapping_user(user=created_user)
 
 
-    async def get_user_by_email(self, email: str) -> UserDto | str:
+    async def get_user_by_email(self, email: str) -> UserDto:
         exist_user = await self.user_repo.get_user_by_email(email=email)
         if not exist_user:
             raise KeyError(f"User with email - {email} not found")
-
         return user_mapping.mapping_user(user=exist_user)
 
 
@@ -49,13 +47,10 @@ class UserService:
 
 
     @transactional
-    async def update_user(self, status: str, email: str) -> UserDto | str:
+    async def update_user(self, status: str, email: str) -> UserDto:
         user = await self.user_repo.get_user_by_email(email=email)
-
         if not user:
             raise KeyError(f"User with email {email} not found")
-
         user.status = status
-
-        await self.user_repo.create_user(user=user)
-        return user_mapping.mapping_user(user=user)
+        updated_user = await self.user_repo.save_user(user=user)
+        return user_mapping.mapping_user(user=updated_user)

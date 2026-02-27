@@ -6,7 +6,7 @@ from src.model import Base, UserStatus
 from src.core import db_manage
 from src.service import UserService
 from src.repo import UnitOfWork, UserRepo
-from src.dto import UserDto
+from src.dto import UserCreateDto, UserDto
 
 
 pytestmark = mark.asyncio(loop_scope="module")
@@ -39,8 +39,13 @@ def get_test_user_service(test_session: AsyncSession) -> UserService:
     )
 
 @sync_fixture
-def get_user() -> UserDto:
-    return UserDto(username="Bob", age=56, email="bob@example.com")
+def get_user() -> UserCreateDto:
+    return UserCreateDto(
+        username="Bob",
+        age=56,
+        email="bob@example.com",
+        status=UserStatus.USER,
+    )
 
 
 # Tests
@@ -48,7 +53,7 @@ def get_user() -> UserDto:
 async def test_create_user(
     get_test_user_service: UserService,
     get_user_repo: UserRepo,
-    get_user: UserDto,
+    get_user: UserCreateDto,
 ) -> None:
     await get_test_user_service.create_user(dto=get_user)
     exists_user = await get_user_repo.get_user_by_email(email=get_user.email)
@@ -66,7 +71,7 @@ async def test_get_list_users(
     users: list[UserDto] = []
 
     for i in range(0, 5):
-        new_user = UserDto(username=f"Test_{i}", age=i, email=f"flexime{i}@yandex.ru")
+        new_user = UserCreateDto(username=f"Test_{i}", age=i, email=f"flexime{i}@yandex.ru")
         users.append(new_user)
 
     for user in users:
@@ -80,7 +85,7 @@ async def test_get_list_users(
 async def test_get_user_by_email(
     get_test_user_service: UserService,
     get_user_repo: UserRepo,
-    get_user: UserDto,
+    get_user: UserCreateDto,
 ):
     await get_test_user_service.create_user(dto=get_user)
 
@@ -92,7 +97,7 @@ async def test_get_user_by_email(
 async def test_update_status_user(
     get_test_user_service: UserService,
     get_user_repo: UserRepo,
-    get_user: UserDto,
+    get_user: UserCreateDto,
 ):
     status = UserStatus.SUPPORT
     await get_test_user_service.create_user(dto=get_user)

@@ -5,6 +5,7 @@ from jwt import encode
 from ..model import Admin
 from ..repo import AdminRepo
 from ..service import PasswordService
+from ..core import settings
 
 
 class AuthService:
@@ -22,7 +23,6 @@ class AuthService:
             hashed_password=exists_admin.password,
         ):
             return None
-
         return exists_admin
 
 
@@ -32,6 +32,6 @@ class AuthService:
         copy_dict.update({"exp": expires})
         return encode(
             payload=copy_dict,
-            key="AAAA",
-            algorithm="HS256",
+            key=settings.jwt_key,
+            algorithm=settings.jwt_algorithm,
         )

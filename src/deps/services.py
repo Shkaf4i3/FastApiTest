@@ -8,7 +8,7 @@ from ..repo import UnitOfWork, UserRepo, AdminRepo
 from ..deps import open_session
 
 
-def get_admin_repo(session: AsyncSession = Depends(open_session)) -> AdminRepo:
+def get_admin_repo(session: Annotated[AsyncSession, Depends(open_session)]) -> AdminRepo:
     return AdminRepo(session=session)
 
 
@@ -27,4 +27,7 @@ def get_auth_service(
     admin_repo: Annotated[AdminRepo, Depends(get_admin_repo)],
     password_service: Annotated[PasswordService, Depends(get_password_service)],
 ) -> AuthService:
-    return AuthService(admin_repo=admin_repo, password_service=password_service)
+    return AuthService(
+        admin_repo=admin_repo,
+        password_service=password_service,
+    )

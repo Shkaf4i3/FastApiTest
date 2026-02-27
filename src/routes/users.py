@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, status, Depends
 
-from ..dto import UserDto
+from ..dto import UserDto, UserCreateDto
 from ..deps import services, auth
 from ..service import UserService
 from ..model import UserStatus, Admin
@@ -17,10 +17,10 @@ router = APIRouter(prefix="/users", tags=["Users Router"])
     description="Create new User with transmitted dto model",
 )
 async def create_user(
-    dto: UserDto,
+    dto: UserCreateDto,
     _: Annotated[Admin, Depends(auth.get_current_user)],
     user_service: Annotated[UserService, Depends(services.get_user_service)],
-) -> UserDto | str:
+) -> UserDto:
     try:
         return await user_service.create_user(dto=dto)
     except KeyError as e:
@@ -38,7 +38,7 @@ async def get_user_by_email(
     email: str,
     _: Annotated[Admin, Depends(auth.get_current_user)],
     user_service: Annotated[UserService, Depends(services.get_user_service)],
-) -> UserDto | str:
+) -> UserDto:
     try:
         return await user_service.get_user_by_email(email=email)
     except KeyError as e:
@@ -91,7 +91,7 @@ async def update_status_user(
     email: str,
     _: Annotated[Admin, Depends(auth.get_current_user)],
     user_service: Annotated[UserService, Depends(services.get_user_service)],
-) -> UserDto | str:
+) -> UserDto:
     try:
         return await user_service.update_user(status=status_user, email=email)
     except KeyError as e:
