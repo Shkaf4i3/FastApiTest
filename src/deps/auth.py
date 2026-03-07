@@ -19,7 +19,7 @@ credentials_exception = HTTPException(
     detail="Could not validate credentials",
     headers={"WWW-Authenticate": "Bearer"},
 )
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/admin/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/admin/auth/token")
 
 
 async def get_oauth2_scheme(token: Annotated[str, Depends(oauth2_scheme)]):
