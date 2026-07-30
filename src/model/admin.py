@@ -10,7 +10,11 @@ from .base import Base
 class Admin(Base):
     __tablename__ = "Admins"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: str(uuid4()))
+    id: Mapped[str] = mapped_column(
+        String,
+        primary_key=True,
+        default=lambda: str(uuid4()),
+    )
     login: Mapped[str] = mapped_column(String, nullable=False)
     password: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
     created_at: Mapped[datetime] = mapped_column(

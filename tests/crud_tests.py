@@ -21,15 +21,18 @@ async def test_engine():
     async with db_manage.test_session_engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
+
 @fixture(loop_scope="module")
 async def test_session():
     async with db_manage.test_session_factory() as session:
         yield session
         await session.close()
 
+
 @sync_fixture
 def get_user_repo(test_session: AsyncSession) -> UserRepo:
     return UserRepo(session=test_session)
+
 
 @sync_fixture
 def get_test_user_service(test_session: AsyncSession) -> UserService:
@@ -37,6 +40,7 @@ def get_test_user_service(test_session: AsyncSession) -> UserService:
         unit_of_work=UnitOfWork(session=test_session),
         user_repo=UserRepo(session=test_session),
     )
+
 
 @sync_fixture
 def get_user() -> UserCreateDto:
@@ -71,7 +75,11 @@ async def test_get_list_users(
     users: list[UserDto] = []
 
     for i in range(0, 5):
-        new_user = UserCreateDto(username=f"Test_{i}", age=i, email=f"flexime{i}@yandex.ru")
+        new_user = UserCreateDto(
+            username=f"Test_{i}",
+            age=i,
+            email=f"flexime{i}@yandex.ru",
+        )
         users.append(new_user)
 
     for user in users:

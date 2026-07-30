@@ -17,7 +17,11 @@ class UserStatus(enum):
 class User(Base):
     __tablename__ = "Users"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: str(uuid4()))
+    id: Mapped[str] = mapped_column(
+        String,
+        primary_key=True,
+        default=lambda: str(uuid4()),
+    )
     username: Mapped[str] = mapped_column(String, nullable=False)
     age: Mapped[int] = mapped_column(Integer, nullable=False)
     email: Mapped[EmailStr] = mapped_column(String, nullable=False, unique=True)

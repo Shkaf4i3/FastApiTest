@@ -8,7 +8,6 @@ class UnitOfWork:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-
     @asynccontextmanager
     async def transaction(self):
         try:

@@ -3,7 +3,7 @@ from typing import Annotated, Any
 from jwt import decode
 from jwt.exceptions import InvalidTokenError
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import APIKeyCookie
 from pydantic import BaseModel
 
 from ..model import Admin
@@ -14,22 +14,25 @@ from .services import get_admin_repo
 
 class TokenData(BaseModel):
     login: str | None = None
+
+
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Could not validate credentials",
-    headers={"WWW-Authenticate": "Bearer"},
 )
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/admin/auth/token")
+cookie_scheme = APIKeyCookie(name="access_token", auto_error=False)
 
 
-async def get_oauth2_scheme(token: Annotated[str, Depends(oauth2_scheme)]):
-    if not token:
+async def get_user_token(
+    token: Annotated[str, Depends(cookie_scheme)],
+):
+    if token is None:
         raise credentials_exception
     return token
 
 
 async def get_current_user(
-    token: Annotated[str, Depends(get_oauth2_scheme)],
+    token: Annotated[str, Depends(get_user_token)],
     admin_repo: Annotated[AdminRepo, Depends(get_admin_repo)],
 ) -> Admin:
     try:

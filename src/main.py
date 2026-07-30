@@ -5,7 +5,11 @@ from .utils import lifespan
 from .routes import users_router, admin_router
 
 
-app = FastAPI(lifespan=lifespan, docs_url="/", redoc_url=None,)
+app = FastAPI(
+    lifespan=lifespan,
+    docs_url="/",
+    redoc_url=None,
+)
 app.router.prefix = "/api/v1"
 app.include_router(router=users_router)
 app.include_router(router=admin_router)
