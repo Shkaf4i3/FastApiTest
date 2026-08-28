@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Dict
 
 from fastapi import APIRouter, HTTPException, status, Depends
 
@@ -56,7 +56,7 @@ async def delete_user_by_email(
     email: str,
     _: Annotated[Admin, Depends(auth.get_current_user)],
     user_service: Annotated[UserService, Depends(services.get_user_service)],
-) -> str | dict[str, str]:
+) -> str | Dict[str, str]:
     try:
         return await user_service.delete_user_by_email(email=email)
     except KeyError as e:

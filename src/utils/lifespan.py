@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
@@ -9,10 +10,9 @@ from ..core import db_manage, settings
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI):
+async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
     async with db_manage.session_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-
     async with db_manage.session_factory.begin() as session:
         admin_repo = AdminRepo(session=session)
         exists_user = await admin_repo.get_admin_by_login(login=settings.admin_login)
@@ -22,8 +22,8 @@ async def lifespan(_: FastAPI):
                 password=settings.admin_password.encode(),
             )
             new_admin = Admin(login=settings.admin_login, password=hashed_password)
-            session.add(new_admin)
+            session.add(instance=new_admin)
             await session.flush()
-            await session.refresh(new_admin)
+            await session.refresh(instance=new_admin)
             await session.commit()
     yield

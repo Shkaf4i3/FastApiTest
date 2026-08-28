@@ -4,14 +4,13 @@ from ..core import settings
 
 
 class DataBaseManager:
-    def __init__(self):
+    def __init__(self) -> None:
         self.session_engine = create_async_engine(
             url=settings.dsn.encoded_string(),
         )
         self.session_factory = async_sessionmaker(
             bind=self.session_engine,
         )
-
         self.test_session_engine = create_async_engine(
             url=settings.test_dsn.encoded_string(),
         )

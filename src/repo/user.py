@@ -5,24 +5,28 @@ from ..model import User
 
 
 class UserRepo:
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
+
     async def save_user(self, user: User) -> User:
-        self.session.add(user)
+        self.session.add(instance=user)
         await self.session.flush()
-        await self.session.refresh(user)
+        await self.session.refresh(instance=user)
         return user
+
 
     async def delete_user(self, user: User) -> None:
         await self.session.flush()
-        await self.session.delete(user)
+        await self.session.delete(instance=user)
         self.session.expire_all()
+
 
     async def get_user_by_email(self, email: str) -> User | None:
         stmt = select(User).where(User.email == email)
         result = await self.session.execute(statement=stmt)
         return result.scalar()
+
 
     async def get_list_users(self) -> list[User]:
         stmt = select(User)

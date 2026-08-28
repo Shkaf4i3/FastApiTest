@@ -25,8 +25,10 @@ async def test_engine():
 @fixture(loop_scope="module")
 async def test_session():
     async with db_manage.test_session_factory() as session:
-        yield session
-        await session.close()
+        try:
+            yield session
+        finally:
+            await session.close()
 
 
 @sync_fixture
@@ -61,7 +63,6 @@ async def test_create_user(
 ) -> None:
     await get_test_user_service.create_user(dto=get_user)
     exists_user = await get_user_repo.get_user_by_email(email=get_user.email)
-
     assert get_user.email == exists_user.email
     assert get_user.age == exists_user.age
     assert get_user.username == exists_user.username
@@ -73,7 +74,6 @@ async def test_get_list_users(
     get_user_repo: UserRepo,
 ) -> None:
     users: list[UserDto] = []
-
     for i in range(0, 5):
         new_user = UserCreateDto(
             username=f"Test_{i}",
@@ -81,10 +81,8 @@ async def test_get_list_users(
             email=f"flexime{i}@yandex.ru",
         )
         users.append(new_user)
-
     for user in users:
         await get_test_user_service.create_user(dto=user)
-
     created_users = await get_user_repo.get_list_users()
     assert created_users != []
 
@@ -96,7 +94,6 @@ async def test_get_user_by_email(
     get_user: UserCreateDto,
 ):
     await get_test_user_service.create_user(dto=get_user)
-
     created_user = await get_user_repo.get_user_by_email(email=get_user.email)
     assert get_user.email == created_user.email
 
@@ -109,11 +106,9 @@ async def test_update_status_user(
 ):
     status = UserStatus.SUPPORT
     await get_test_user_service.create_user(dto=get_user)
-
     await get_test_user_service.update_user(status=status, email=get_user.email)
     refresh_user = await get_user_repo.get_user_by_email(email=get_user.email)
     assert refresh_user.status == status
-
     status = UserStatus.USER
     await get_test_user_service.update_user(status=status, email=get_user.email)
     refresh_user = await get_user_repo.get_user_by_email(email=get_user.email)

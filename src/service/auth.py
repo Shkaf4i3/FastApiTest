@@ -13,6 +13,7 @@ class AuthService:
         self.admin_repo = admin_repo
         self.password_service = password_service
 
+
     async def auth_admin(self, login: str, password: str) -> Admin | None:
         exists_admin = await self.admin_repo.get_admin_by_login(login=login)
         if not exists_admin:
@@ -23,6 +24,7 @@ class AuthService:
         ):
             return None
         return exists_admin
+
 
     def create_access_token(self, data: dict) -> str:
         copy_dict = data.copy()
